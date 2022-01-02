@@ -1,6 +1,4 @@
-package com.falsepattern.frender.util;
-
-import java.util.Optional;
+package com.falsepattern.fengine.util;
 
 /**
  * A queue that drops the oldest element when it is full.

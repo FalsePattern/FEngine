@@ -1,6 +1,6 @@
-package com.falsepattern.frender.window.mouse;
+package com.falsepattern.fengine.window.mouse;
 
-import com.falsepattern.frender.util.CircularDroppingQueue;
+import com.falsepattern.fengine.util.CircularDroppingQueue;
 import lombok.Getter;
 import org.lwjgl.glfw.GLFW;
 

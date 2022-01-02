@@ -1,10 +1,13 @@
-package com.falsepattern.frender.window.keyboard;
+package com.falsepattern.fengine.window.keyboard;
 
-import com.falsepattern.frender.util.CircularDroppingQueue;
-import com.falsepattern.frender.util.CircularDroppingQueueChar;
+import com.falsepattern.fengine.util.CircularDroppingQueue;
+import com.falsepattern.fengine.util.CircularDroppingQueueChar;
+import lombok.val;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,7 +29,7 @@ public class Keyboard {
     private void keyCallback(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW.GLFW_REPEAT && !autoRepeat) return;
         keyMap.set(key, action != GLFW.GLFW_RELEASE);
-        keyEvents.add(new KeyEvent(key, action != GLFW.GLFW_RELEASE));
+        keyEvents.add(new KeyEvent(Key.fromGLFW(key), action != GLFW.GLFW_RELEASE));
     }
 
     private void charCallback(long window, int codepoint) {
@@ -45,12 +48,20 @@ public class Keyboard {
         return keyEvents.available() ? Optional.of(keyEvents.poll()) : Optional.empty();
     }
 
+    public List<KeyEvent> getKeys() {
+        val result = new ArrayList<KeyEvent>();
+        while (keyEvents.available()) {
+            result.add(keyEvents.poll());
+        }
+        return result;
+    }
+
     public char getChar() {
         return charEvents.poll();
     }
 
-    public boolean isKeyPressed(int key) {
-        return keyMap.get(key);
+    public boolean isKeyPressed(Key key) {
+        return keyMap.get(key.toGLFW());
     }
 
 }

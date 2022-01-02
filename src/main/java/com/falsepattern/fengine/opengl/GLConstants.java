@@ -1,4 +1,4 @@
-package com.falsepattern.frender.opengl;
+package com.falsepattern.fengine.opengl;
 
 public class GLConstants {
     public static final int MAJOR_VERSION = 3;
