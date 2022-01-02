@@ -2,6 +2,9 @@ package com.falsepattern.fengine.window.keyboard;
 
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Represents a key on the keyboard.
+ */
 public enum Key {
     KEY_UNKNOWN,
     KEY_SPACE,
