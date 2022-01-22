@@ -16,6 +16,8 @@ public class Shader implements Disposable {
     private static int currentShader = 0;
     protected final int program;
 
+    private final List<Uniform> loadedUniforms = new ArrayList<>();
+
     public Shader(int program) {
         this.program = program;
     }
@@ -32,7 +34,7 @@ public class Shader implements Disposable {
         glUseProgram(0);
     }
 
-    public <T extends Uniform> T getUniform(String name, BiFunction<Integer, Integer, T> constructor) {
+    protected <T extends Uniform> T getUniform(String name, BiFunction<Integer, Integer, T> constructor) {
         val loc = glGetUniformLocation(program, name);
         if (loc < 0) {
             throw new ShaderException("Failed to retrieve uniform location: " + name);
@@ -62,10 +64,11 @@ public class Shader implements Disposable {
         if (result.size() != size) {
             throw new ShaderException("Failed to retrieve uniform " + name + " as " + result.getClass().getCanonicalName() + ": Size mismatch!");
         }
+        loadedUniforms.add(result);
         return result;
     }
 
-    public int getAttribLocation(String name) {
+    private int getAttribLocation(String name) {
         val loc = glGetAttribLocation(program, name);
         if (loc < 0) {
             throw new ShaderException("Failed to retrieve attribute location: " + name);
@@ -75,6 +78,7 @@ public class Shader implements Disposable {
 
     @Override
     public void dispose() {
+        loadedUniforms.forEach(Disposable::dispose);
         glDeleteProgram(program);
     }
 

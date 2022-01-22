@@ -2,34 +2,33 @@ package com.falsepattern.fengine.opengl.shader.common.uniforms.ints;
 
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
-import org.lwjgl.opengl.GL20;
-
-import java.nio.IntBuffer;
+import org.lwjgl.opengl.GL20C;
 
 public class Uniform2I extends UniformI {
     public Uniform2I(int program, int location) {
-        super(program, location);
-    }
-
-    public void set(IntBuffer input) {
-        GL20.glUniform2iv(location, input);
+        super(program, location, 2);
     }
 
     public void set(int x, int y) {
-        GL20.glUniform2i(location, x, y);
+        buffer.put(0, x);
+        buffer.put(1, y);
     }
 
     public void set(Vector2ic input) {
-        set(input.x(), input.y());
+        input.get(0, buffer);
     }
 
     public void get(Vector2i output) {
-        get(transferBuffer);
-        output.set(transferBuffer);
+        output.set(0, buffer);
+    }
+
+    @Override
+    public void upload() {
+        GL20C.glUniform2iv(location, buffer);
     }
 
     @Override
     public int type() {
-        return GL20.GL_INT_VEC2;
+        return GL20C.GL_INT_VEC2;
     }
 }

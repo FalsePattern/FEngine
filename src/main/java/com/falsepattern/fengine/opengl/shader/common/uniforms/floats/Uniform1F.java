@@ -1,30 +1,28 @@
 package com.falsepattern.fengine.opengl.shader.common.uniforms.floats;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
-import java.nio.FloatBuffer;
+import org.lwjgl.opengl.GL11C;
+import org.lwjgl.opengl.GL20C;
 
 public class Uniform1F extends UniformF {
     public Uniform1F(int program, int location) {
-        super(program, location);
-    }
-
-    public void set(FloatBuffer input) {
-        GL20.glUniform1fv(location, input);
+        super(program, location, 1);
     }
 
     public void set(float x) {
-        GL20.glUniform1f(location, x);
+        buffer.put(0, x);
     }
 
     public float get() {
-        get(transferBuffer);
-        return transferBuffer.get(0);
+        return buffer.get(0);
+    }
+
+    @Override
+    public void upload() {
+        GL20C.glUniform1fv(location, buffer);
     }
 
     @Override
     public int type() {
-        return GL11.GL_FLOAT;
+        return GL11C.GL_FLOAT;
     }
 }

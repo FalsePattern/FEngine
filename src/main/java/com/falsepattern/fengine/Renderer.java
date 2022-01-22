@@ -53,6 +53,7 @@ public class Renderer implements Disposable {
         object.applyWorldMatrix(modelViewProjection);
         shader.modelViewProjection.set(modelViewProjection);
         shader.bind();
+        shader.modelViewProjection.upload();
         object.mesh.draw();
     }
 }

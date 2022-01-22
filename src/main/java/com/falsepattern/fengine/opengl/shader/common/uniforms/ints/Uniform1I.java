@@ -1,30 +1,28 @@
 package com.falsepattern.fengine.opengl.shader.common.uniforms.ints;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
-import java.nio.IntBuffer;
+import org.lwjgl.opengl.GL11C;
+import org.lwjgl.opengl.GL20C;
 
 public class Uniform1I extends UniformI {
     public Uniform1I(int program, int location) {
-        super(program, location);
-    }
-
-    public void set(IntBuffer values) {
-        GL20.glUniform1iv(location, values);
+        super(program, location, 1);
     }
 
     public void set(int x) {
-        GL20.glUniform1i(location, x);
+        buffer.put(0, x);
     }
 
     public int get() {
-        get(transferBuffer);
-        return transferBuffer.get(0);
+        return buffer.get(0);
+    }
+
+    @Override
+    public void upload() {
+        GL20C.glUniform1iv(location, buffer);
     }
 
     @Override
     public int type() {
-        return GL11.GL_INT;
+        return GL11C.GL_INT;
     }
 }

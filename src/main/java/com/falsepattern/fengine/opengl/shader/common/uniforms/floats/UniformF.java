@@ -1,20 +1,26 @@
 package com.falsepattern.fengine.opengl.shader.common.uniforms.floats;
 
 import com.falsepattern.fengine.opengl.shader.common.uniforms.Uniform;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.opengl.GL20C;
 
 import java.nio.FloatBuffer;
 
 public abstract class UniformF extends Uniform {
-    protected static final FloatBuffer transferBuffer = MemoryUtil.memAllocFloat(16); //Up to 4x4 matrices.
-    public UniformF(int program, int location) {
-        super(program, location);
+    protected final FloatBuffer buffer = super.buffer.asFloatBuffer();
+    public UniformF(int program, int location, int floatCount) {
+        super(program, location, floatCount * 4);
     }
 
-    public abstract void set(FloatBuffer input);
+    public void set(FloatBuffer input) {
+        buffer.put(0, input, 0, buffer.limit());
+    }
 
     public void get(FloatBuffer output) {
-        GL20.glGetUniformfv(program, location, output);
+        output.put(0, buffer, 0, buffer.limit());
+    }
+
+    @Override
+    public void download() {
+        GL20C.glGetUniformfv(program, location, buffer);
     }
 }

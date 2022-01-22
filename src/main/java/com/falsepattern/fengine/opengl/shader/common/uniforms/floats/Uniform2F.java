@@ -2,34 +2,33 @@ package com.falsepattern.fengine.opengl.shader.common.uniforms.floats;
 
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
-import org.lwjgl.opengl.GL20;
-
-import java.nio.FloatBuffer;
+import org.lwjgl.opengl.GL20C;
 
 public class Uniform2F extends UniformF {
     public Uniform2F(int program, int location) {
-        super(program, location);
-    }
-
-    public void set(FloatBuffer input) {
-        GL20.glUniform2fv(location, input);
+        super(program, location, 2);
     }
 
     public void set(float x, float y) {
-        GL20.glUniform2f(location, x, y);
+        buffer.put(0, x);
+        buffer.put(1, y);
     }
 
     public void set(Vector2fc input) {
-        set(input.x(), input.y());
+        input.get(0, buffer);
     }
 
     public void get(Vector2f output) {
-        get(transferBuffer);
-        output.set(transferBuffer);
+        output.set(0, buffer);
+    }
+
+    @Override
+    public void upload() {
+        GL20C.glUniform2fv(location, buffer);
     }
 
     @Override
     public int type() {
-        return GL20.GL_FLOAT_VEC2;
+        return GL20C.GL_FLOAT_VEC2;
     }
 }

@@ -2,30 +2,28 @@ package com.falsepattern.fengine.opengl.shader.common.uniforms.floats;
 
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
-import org.lwjgl.opengl.GL20;
-
-import java.nio.FloatBuffer;
+import org.lwjgl.opengl.GL20C;
 
 public class UniformMatrix4F extends UniformF {
     public UniformMatrix4F(int program, int location) {
-        super(program, location);
-    }
-
-    public void set(FloatBuffer input) {
-        GL20.glUniformMatrix4fv(location, false, input);
+        super(program, location, 16);
     }
 
     public void set(Matrix4fc input) {
-        set(input.get(transferBuffer));
+        input.get(0, buffer);
     }
 
     public void get(Matrix4f output) {
-        get(transferBuffer);
-        output.set(transferBuffer);
+        output.set(0, buffer);
+    }
+
+    @Override
+    public void upload() {
+        GL20C.glUniformMatrix4fv(location, false, buffer);
     }
 
     @Override
     public int type() {
-        return GL20.GL_FLOAT_MAT4;
+        return GL20C.GL_FLOAT_MAT4;
     }
 }
